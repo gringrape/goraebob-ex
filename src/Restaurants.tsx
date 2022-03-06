@@ -1,34 +1,32 @@
 import { gql, useQuery } from '@apollo/client';
 
-const GET_DOGS = gql`
+import Restaurant, { RestaurantType } from './Restaurant';
+
+const GET_RESTAURANTS = gql`
 query {
-  launchesPast(limit: 10) {
-    mission_name
-    launch_date_local
-    launch_site {
-      site_name_long
-    }
+  restaurants {
+    id
+    name
+    likes
   }
 }
 `;
 
 export default function Restaurants() {
-  const { data, loading } = useQuery(GET_DOGS);
+  const { data, loading } = useQuery(GET_RESTAURANTS);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  console.log(data);
-
   return (
     <ul>
-      <li>
-        <h3>고래식당</h3>
-      </li>
-      <li>
-        <h3>순살돈가스</h3>
-      </li>
+      {data.restaurants.map((restaurant: RestaurantType) => (
+        <Restaurant
+          key={restaurant.id}
+          restaurant={restaurant}
+        />
+      ))}
     </ul>
   );
 }
